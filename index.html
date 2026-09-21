@@ -47,7 +47,7 @@
 </head>
 <body class="bg-gray-100 text-gray-800 antialiased min-h-screen pb-24 md:pb-10">
 
-  <!-- TOP HEADER (DESKTOP & MOBILE) -->
+  <!-- TOP HEADER -->
   <header class="bg-brand-dark text-white shadow-lg sticky top-0 z-30">
     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
       <div class="flex items-center gap-3">
@@ -92,10 +92,8 @@
   <!-- MAIN CONTAINER -->
   <main class="max-w-6xl mx-auto px-4 py-6">
 
-    <!-- ================= CLIENT VIEW ================= -->
+    <!-- CLIENT VIEW -->
     <div id="view-client" class="space-y-6">
-
-      <!-- CATEGORY NAV (STICKY) -->
       <nav class="sticky top-[57px] z-20 bg-gray-100/90 backdrop-blur-md py-2 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-gray-200">
         <div class="flex items-center gap-2 min-w-max">
           <button onclick="filterCategory('todos')" class="cat-btn bg-brand-600 text-white px-4 py-2 rounded-full font-semibold text-xs md:text-sm shadow-sm transition">
@@ -116,45 +114,43 @@
         </div>
       </nav>
 
-      <!-- PRODUCTS GRID -->
       <section>
         <h2 id="category-title" class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
            Cardápio Completo
         </h2>
         <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Dynamically Injected -->
+          <p class="col-span-full text-center text-gray-400 py-10">A carregar o cardápio...</p>
         </div>
       </section>
-
     </div>
 
-    <!-- ================= ADMIN VIEW (PAINEL DO DONO) ================= -->
+    <!-- ADMIN VIEW -->
     <div id="view-admin" class="hidden space-y-6">
       
-      <!-- LOGIN MODAL / CONTAINER -->
+      <!-- LOGIN CARD -->
       <div id="admin-login-card" class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-xl border border-gray-200 text-center">
         <div class="w-16 h-16 bg-purple-100 text-brand-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
           <i class="fa-solid fa-user-shield"></i>
         </div>
         <h2 class="text-xl font-bold text-gray-800 mb-2">Painel do Proprietário</h2>
-        <p class="text-sm text-gray-500 mb-6">Digite a senha para acessar as configurações do cardápio.</p>
+        <p class="text-sm text-gray-500 mb-6">Autenticação Firebase via E-mail e Senha</p>
         
         <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-          <input type="password" id="admin-pass-input" placeholder="Digite a senha" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-center text-lg tracking-widest">
-          <p id="admin-error-msg" class="text-xs text-red-500 hidden font-semibold">Senha incorreta. Tente novamente.</p>
-          <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition">
-            Acessar Painel
+          <input type="email" id="admin-email-input" required placeholder="E-mail (ex: dono@acaitops.com.br)" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm">
+          <input type="password" id="admin-pass-input" required placeholder="Senha de acesso" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm">
+          <p id="admin-error-msg" class="text-xs text-red-500 hidden font-semibold"></p>
+          <button type="submit" id="btn-login-submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-md transition">
+            Entrar no Painel
           </button>
         </form>
       </div>
 
-      <!-- ADMIN DASHBOARD (HIDDEN UNTIL AUTH) -->
+      <!-- DASHBOARD -->
       <div id="admin-dashboard" class="hidden space-y-6">
-        
         <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-4">
           <div>
             <h2 class="text-xl font-bold text-gray-800">Gerenciador do Cardápio</h2>
-            <p class="text-xs text-gray-500">Adicione novos itens, edite preços ou remova produtos.</p>
+            <p class="text-xs text-gray-500">Sincronizado em tempo real via Firebase Firestore.</p>
           </div>
           <div class="flex gap-2">
             <button onclick="openAddProductModal()" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition">
@@ -166,23 +162,21 @@
           </div>
         </div>
 
-        <!-- LIST OF PRODUCTS (ADMIN) -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 border-b border-gray-100 font-bold text-gray-700">
-            Produtos Cadastrados
+            Produtos no Banco de Dados
           </div>
           <div id="admin-products-list" class="divide-y divide-gray-100">
-            <!-- Dynamically Loaded -->
+            <!-- Loaded from Firestore -->
           </div>
         </div>
-
       </div>
 
     </div>
 
   </main>
 
-  <!-- FLOATING CART BUTTON (MOBILE) -->
+  <!-- FLOATING CART BUTTON -->
   <div id="floating-cart-btn" class="fixed bottom-4 left-4 right-4 z-20 md:hidden hidden">
     <button onclick="toggleCartModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-5 rounded-2xl shadow-xl flex items-center justify-between transition">
       <div class="flex items-center gap-2">
@@ -251,7 +245,7 @@
     </div>
   </div>
 
-  <!-- ADD/EDIT PRODUCT MODAL (ADMIN) -->
+  <!-- ADD PRODUCT MODAL -->
   <div id="add-product-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
       <div class="p-4 bg-brand-dark text-white flex justify-between items-center">
@@ -287,7 +281,7 @@
 
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Foto do Produto (Galeria / Câmera) *</label>
-          <input type="file" id="prod-image-file" accept="image/*" onchange="previewSelectedImage(event)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-100 file:text-brand-700 hover:file:bg-purple-200">
+          <input type="file" id="prod-image-file" accept="image/*" onchange="previewAndCompressImage(event)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-100 file:text-brand-700 hover:file:bg-purple-200">
           <div id="image-preview-container" class="mt-2 hidden">
             <img id="image-preview" src="" alt="Pré-visualização" class="h-28 w-full object-cover rounded-lg border">
           </div>
@@ -302,15 +296,15 @@
           <button type="button" onclick="closeAddProductModal()" class="flex-1 py-2.5 border border-gray-300 rounded-xl text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
             Cancelar
           </button>
-          <button type="submit" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-bold shadow-md transition">
-            Salvar Produto
+          <button type="submit" id="btn-save-prod" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-bold shadow-md transition">
+            Salvar no Firebase
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- STORE HOURS MODAL -->
+  <!-- HOURS MODAL -->
   <div id="hours-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl p-5 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
@@ -359,65 +353,163 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // INITIAL DEFAULT PRODUCTS
-    const defaultProducts = [
-      {
-        id: '1',
-        name: 'Copo Tradicional 300ml',
-        category: 'copos',
-        price: 14.00,
-        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=600&q=80',
-        desc: 'Açaí puro e cremoso + 3 adicionais à sua escolha.'
-      },
-      {
-        id: '2',
-        name: 'Copo Especial 500ml',
-        category: 'copos',
-        price: 18.00,
-        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=600&q=80',
-        desc: 'Tamanho ideal! Açaí cremoso + 4 adicionais inclusos.'
-      },
-      {
-        id: '3',
-        name: 'Tigela de Açaí Tops 700ml',
-        category: 'tigelas',
-        price: 26.00,
-        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=600&q=80',
-        desc: 'Servida na tigela caprichada com morango, banana, granolas e leite condensado.'
-      },
-      {
-        id: '4',
-        name: 'Barca de Açaí Família 1 Litro',
-        category: 'barcas',
-        price: 45.00,
-        image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=600&q=80',
-        desc: 'Perfeita para compartilhar! Acompanha até 6 adicionais grátis.'
-      }
-    ];
+  <!-- FIREBASE INTEGRATION SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // STATE
-    let products = JSON.parse(localStorage.getItem('acai_products')) || defaultProducts;
-    let cart = [];
-    let isAdminAuthenticated = false;
-    let activeCategory = 'todos';
-    let currentBase64Image = '';
+    // Suas credenciais do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCiJxzdI6kZ8rhP__wJ4pJ-fHTzDQF9Ow4",
+      authDomain: "acaitops-a5af1.firebaseapp.com",
+      projectId: "acaitops-a5af1",
+      storageBucket: "acaitops-a5af1.firebasestorage.app",
+      messagingSenderId: "669594130434",
+      appId: "1:669594130434:web:42c2aafe491a4892ddaf1b"
+    };
 
-    // INIT
-    window.addEventListener('DOMContentLoaded', () => {
+    // Inicialização do Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Global State
+    window.products = [];
+    window.cart = [];
+    window.activeCategory = 'todos';
+    window.compressedImageBase64 = '';
+
+    // Ouvinte em tempo real para os produtos no Firestore
+    onSnapshot(collection(db, "products"), (snapshot) => {
+      window.products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       renderProducts();
-      updateCartUI();
+      renderAdminProductsList();
     });
 
-    // RENDER PRODUCTS IN CLIENT VIEW
+    // Estado da Autenticação do Usuário
+    onAuthStateChanged(auth, (user) => {
+      const loginCard = document.getElementById('admin-login-card');
+      const dashboard = document.getElementById('admin-dashboard');
+
+      if (user) {
+        loginCard.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+      } else {
+        loginCard.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+      }
+    });
+
+    // Login com E-mail e Senha
+    window.handleAdminLogin = async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email-input').value;
+      const pass = document.getElementById('admin-pass-input').value;
+      const errorMsg = document.getElementById('admin-error-msg');
+      const btn = document.getElementById('btn-login-submit');
+
+      try {
+        btn.innerText = "A autenticar...";
+        await signInWithEmailAndPassword(auth, email, pass);
+        errorMsg.classList.add('hidden');
+      } catch (err) {
+        errorMsg.innerText = "E-mail ou senha incorretos.";
+        errorMsg.classList.remove('hidden');
+      } finally {
+        btn.innerText = "Entrar no Painel";
+      }
+    };
+
+    // Logout
+    window.logoutAdmin = function() {
+      signOut(auth);
+    };
+
+    // Compressão da Imagem da Galeria via Canvas
+    window.previewAndCompressImage = function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 500;
+            const scaleFactor = MAX_WIDTH / img.width;
+
+            canvas.width = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
+            canvas.height = (img.width > MAX_WIDTH) ? img.height * scaleFactor : img.height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            window.compressedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            document.getElementById('image-preview').src = window.compressedImageBase64;
+            document.getElementById('image-preview-container').classList.remove('hidden');
+          }
+        }
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Salvar Novo Produto no Firestore
+    window.handleSaveProduct = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('prod-name').value;
+      const category = document.getElementById('prod-category').value;
+      const price = parseFloat(document.getElementById('prod-price').value);
+      const desc = document.getElementById('prod-desc').value;
+      const btn = document.getElementById('btn-save-prod');
+
+      if (!window.compressedImageBase64) {
+        alert('Selecione uma imagem da galeria.');
+        return;
+      }
+
+      try {
+        btn.innerText = "A guardar...";
+        await addDoc(collection(db, "products"), {
+          name,
+          category,
+          price,
+          desc,
+          image: window.compressedImageBase64,
+          createdAt: new Date()
+        });
+
+        closeAddProductModal();
+        e.target.reset();
+        window.compressedImageBase64 = '';
+      } catch (err) {
+        alert("Erro ao salvar produto: " + err.message);
+      } finally {
+        btn.innerText = "Salvar no Firebase";
+      }
+    };
+
+    // Apagar Produto do Firestore
+    window.deleteProduct = async function(id) {
+      if (confirm("Tem certeza que deseja apagar este produto do cardápio?")) {
+        try {
+          await deleteDoc(doc(db, "products", id));
+        } catch (err) {
+          alert("Erro ao apagar produto: " + err.message);
+        }
+      }
+    };
+  </script>
+
+  <!-- APP INTERACTION SCRIPT -->
+  <script>
     function renderProducts() {
       const grid = document.getElementById('products-grid');
       grid.innerHTML = '';
 
-      const filtered = activeCategory === 'todos' 
-        ? products 
-        : products.filter(p => p.category === activeCategory);
+      const filtered = window.activeCategory === 'todos' 
+        ? window.products 
+        : window.products.filter(p => p.category === window.activeCategory);
 
       if (filtered.length === 0) {
         grid.innerHTML = `
@@ -451,9 +543,8 @@
       });
     }
 
-    // CATEGORY FILTER
     function filterCategory(cat) {
-      activeCategory = cat;
+      window.activeCategory = cat;
       document.querySelectorAll('.cat-btn').forEach(btn => {
         btn.classList.remove('bg-brand-600', 'text-white');
         btn.classList.add('bg-white', 'text-gray-700');
@@ -463,27 +554,26 @@
       renderProducts();
     }
 
-    // CART MANAGEMENT
     function addToCart(id) {
-      const prod = products.find(p => p.id === id);
+      const prod = window.products.find(p => p.id === id);
       if (!prod) return;
 
-      const existing = cart.find(item => item.id === id);
+      const existing = window.cart.find(item => item.id === id);
       if (existing) {
         existing.qty += 1;
       } else {
-        cart.push({ ...prod, qty: 1 });
+        window.cart.push({ ...prod, qty: 1 });
       }
       updateCartUI();
     }
 
     function updateCartQty(id, delta) {
-      const item = cart.find(i => i.id === id);
+      const item = window.cart.find(i => i.id === id);
       if (!item) return;
 
       item.qty += delta;
       if (item.qty <= 0) {
-        cart = cart.filter(i => i.id !== id);
+        window.cart = window.cart.filter(i => i.id !== id);
       }
       updateCartUI();
     }
@@ -496,8 +586,8 @@
       const subtotalEl = document.getElementById('cart-subtotal');
       const totalEl = document.getElementById('cart-total');
 
-      const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
-      const totalPrice = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const totalItems = window.cart.reduce((acc, i) => acc + i.qty, 0);
+      const totalPrice = window.cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
 
       countEl.innerText = totalItems;
       floatTotalEl.innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
@@ -508,9 +598,8 @@
         floatBtn.classList.add('hidden');
       }
 
-      // Render items in modal
       container.innerHTML = '';
-      if (cart.length === 0) {
+      if (window.cart.length === 0) {
         container.innerHTML = `
           <div class="text-center py-10 text-gray-400">
             <i class="fa-solid fa-basket-shopping text-4xl mb-2"></i>
@@ -518,7 +607,7 @@
           </div>
         `;
       } else {
-        cart.forEach(item => {
+        window.cart.forEach(item => {
           const div = document.createElement('div');
           div.className = 'flex items-center justify-between bg-gray-50 p-3 rounded-xl border border-gray-200';
           div.innerHTML = `
@@ -544,19 +633,16 @@
     }
 
     function toggleCartModal() {
-      const modal = document.getElementById('cart-modal');
-      modal.classList.toggle('hidden');
+      document.getElementById('cart-modal').classList.toggle('hidden');
     }
 
     function toggleHoursModal() {
-      const modal = document.getElementById('hours-modal');
-      modal.classList.toggle('hidden');
+      document.getElementById('hours-modal').classList.toggle('hidden');
     }
 
-    // WHATSAPP ORDER BUILDER
     function handleSendWhatsApp(e) {
       e.preventDefault();
-      if (cart.length === 0) {
+      if (window.cart.length === 0) {
         alert('Adicione itens ao carrinho antes de enviar.');
         return;
       }
@@ -573,11 +659,11 @@
       if (obs) text += `*Observações:* ${obs}\n`;
       text += `\n*ITENS DO PEDIDO:*\n`;
 
-      cart.forEach(item => {
+      window.cart.forEach(item => {
         text += `• ${item.qty}x ${item.name} - R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}\n`;
       });
 
-      const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const total = window.cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
       text += `\n*TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*`;
 
       const phone = "5516999587853";
@@ -585,7 +671,6 @@
       window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
     }
 
-    // ADMIN AUTH & CONTROLS
     function toggleAdminView() {
       const clientView = document.getElementById('view-client');
       const adminView = document.getElementById('view-admin');
@@ -602,34 +687,12 @@
       }
     }
 
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const pass = document.getElementById('admin-pass-input').value;
-      const errorMsg = document.getElementById('admin-error-msg');
-
-      if (pass === '1234') {
-        isAdminAuthenticated = true;
-        errorMsg.classList.add('hidden');
-        document.getElementById('admin-login-card').classList.add('hidden');
-        document.getElementById('admin-dashboard').classList.remove('hidden');
-        renderAdminProductsList();
-      } else {
-        errorMsg.classList.remove('hidden');
-      }
-    }
-
-    function logoutAdmin() {
-      isAdminAuthenticated = false;
-      document.getElementById('admin-login-card').classList.remove('hidden');
-      document.getElementById('admin-dashboard').classList.add('hidden');
-      document.getElementById('admin-pass-input').value = '';
-    }
-
     function renderAdminProductsList() {
       const container = document.getElementById('admin-products-list');
+      if (!container) return;
       container.innerHTML = '';
 
-      products.forEach(p => {
+      window.products.forEach(p => {
         const row = document.createElement('div');
         row.className = 'p-4 flex items-center justify-between gap-4 hover:bg-gray-50 transition';
         row.innerHTML = `
@@ -649,65 +712,13 @@
     }
 
     function openAddProductModal() {
-      currentBase64Image = '';
+      window.compressedImageBase64 = '';
       document.getElementById('image-preview-container').classList.add('hidden');
       document.getElementById('add-product-modal').classList.remove('hidden');
     }
 
     function closeAddProductModal() {
       document.getElementById('add-product-modal').classList.add('hidden');
-    }
-
-    function previewSelectedImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          currentBase64Image = e.target.result;
-          document.getElementById('image-preview').src = currentBase64Image;
-          document.getElementById('image-preview-container').classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function handleSaveProduct(e) {
-      e.preventDefault();
-      const name = document.getElementById('prod-name').value;
-      const category = document.getElementById('prod-category').value;
-      const price = parseFloat(document.getElementById('prod-price').value);
-      const desc = document.getElementById('prod-desc').value;
-
-      if (!currentBase64Image) {
-        alert('Por favor, selecione uma imagem da galeria.');
-        return;
-      }
-
-      const newProduct = {
-        id: Date.now().toString(),
-        name,
-        category,
-        price,
-        image: currentBase64Image,
-        desc
-      };
-
-      products.push(newProduct);
-      localStorage.setItem('acai_products', JSON.stringify(products));
-
-      renderProducts();
-      renderAdminProductsList();
-      closeAddProductModal();
-      e.target.reset();
-    }
-
-    function deleteProduct(id) {
-      if (confirm('Tem certeza que deseja remover este produto?')) {
-        products = products.filter(p => p.id !== id);
-        localStorage.setItem('acai_products', JSON.stringify(products));
-        renderProducts();
-        renderAdminProductsList();
-      }
     }
   </script>
 </body>
